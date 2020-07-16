@@ -1,7 +1,8 @@
 import pymongo
-
-client = pymongo.MongoClient("mongodb+srv://BlackIsBlock:gFu2zQaM5gdA3oxz@objectcompare.2twc4.mongodb.net/ComparisonObjects?retryWrites=true&w=majority")
+apiKey = open('/home/pi/apikey.txt','r').read()
+client = pymongo.MongoClient(apiKey)
 db = client.ComparisonObjects
 objectInfo = db.objectInfo
+print(db.list_collection_names())
 
 
