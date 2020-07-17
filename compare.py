@@ -1,30 +1,32 @@
 import pymongo
 apiKey = open('/home/pi/apikey.txt','r').read()
+print(apiKey)
 client = pymongo.MongoClient(apiKey)
 db = client.ComparisonObjects
 objectInfo = db.objectInfo
-<<<<<<< HEAD
-
-try:
-    db.comparisons.remove({})
-    
-except:
+firstDog = ""
+secondDog = ""
+def newDog():
+    global firstDog
+    global secondDog
     try:
-        print(objectInfo.aggregate([{ "$sample": { "size": 2 } },{ "$out" : "comparisons"}]))
+        db.comparisons.remove({})
+        
     except:
-        print("Done")
-comparisonDogs = []
-for i in db.comparisons.find():
-    comparisonDogs.append(i)
+        try:
+            objectInfo.aggregate([{ "$sample": { "size": 2 } },{ "$out" : "comparisons"}])
+        except:
+            pass
+    comparisonDogs = []
+    for i in db.comparisons.find():
+        comparisonDogs.append(i)
 
-firstDog = objectInfo.find({ "Name": comparisonDogs[0]["Name"] })
-secondDog = objectInfo.find({ "Name": comparisonDogs[1]["Name"] })
-print(f'Dog #1: {comparisonDogs[0]["Name"]}, {comparisonDogs[0]["Image"]}')
-print(f'Dog #2: {comparisonDogs[1]["Name"]}, {comparisonDogs[1]["Image"]}')
+    firstDog = objectInfo.find({ "Name": comparisonDogs[0]["Name"] })
+    secondDog = objectInfo.find({ "Name": comparisonDogs[1]["Name"] })
 
 def SetElo(Dog1ID, Dog2ID, winner):
-    Dog1 = objectInfo.find({ "_id": Dog1ID[0]["_id"] })
-    Dog2 = objectInfo.find({ "_id": Dog2ID[0]["_id"] })
+    Dog1 = objectInfo.find({ "Name": Dog1ID })
+    Dog2 = objectInfo.find({ "Name": Dog2ID })
 
     Dog1ELOHold = int(Dog1[0]["ELO"])
     Dog2ELOHold = int(Dog2[0]["ELO"])
@@ -33,7 +35,7 @@ def SetElo(Dog1ID, Dog2ID, winner):
     Dog2Wins = int(Dog2[0]["Wins"])
     Dog1Losses = int(Dog1[0]["Losses"])
     Dog2Losses = int(Dog2[0]["Losses"])
-    if (winner == 1):
+    if (winner == str(1)):
         Dog1Wins +=1
         Dog2Losses +=1
     else:
@@ -41,14 +43,13 @@ def SetElo(Dog1ID, Dog2ID, winner):
         Dog1Losses +=1
     Dog1ELO = Dog2ELOHold + 400 * (Dog1Wins - Dog1Losses)
     Dog2ELO = Dog1ELOHold + 400 * (Dog2Wins - Dog2Losses)
+    print(Dog1ELO)
+    print(Dog2ELO)
     try:
-        objectInfo.update_one({ "_id": Dog1ID[0]["_id"] }, { "$set": { "ELO": str(Dog1ELO), "Wins": str(Dog1Wins), "Losses": str(Dog1Losses) }})
+        objectInfo.update_one({ "_id": Dog1[0]["_id"] }, { "$set": { "ELO": str(Dog1ELO), "Wins": str(Dog1Wins), "Losses": str(Dog1Losses) }})
     except:
         pass
     try:
-        objectInfo.update_one({ "_id": Dog2ID[0]["_id"] }, { "$set": { "ELO": str(Dog2ELO), "Wins": str(Dog2Wins), "Losses": str(Dog2Losses) }})
+        objectInfo.update_one({ "_id": Dog2[0]["_id"] }, { "$set": { "ELO": str(Dog2ELO), "Wins": str(Dog2Wins), "Losses": str(Dog2Losses) }})
     except:
         pass
-dogWinner = int(input("Which dog is cuter?"))
-SetElo(firstDog, secondDog, dogWinner)
-    
