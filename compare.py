@@ -3,6 +3,7 @@ apiKey = open('/home/pi/apikey.txt','r').read()
 client = pymongo.MongoClient(apiKey)
 db = client.ComparisonObjects
 objectInfo = db.objectInfo
+<<<<<<< HEAD
 
 try:
     db.comparisons.remove({})
@@ -50,5 +51,4 @@ def SetElo(Dog1ID, Dog2ID, winner):
         pass
 dogWinner = int(input("Which dog is cuter?"))
 SetElo(firstDog, secondDog, dogWinner)
-    
     
