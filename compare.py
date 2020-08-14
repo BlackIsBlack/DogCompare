@@ -1,7 +1,7 @@
 import pymongo
-from boto.s3.connection import S3Connection
+
 import environ
-s3 = S3Connection(os.environ['apiKey'])
+
 apiKey = env('APIKEY')
 client = pymongo.MongoClient(apiKey)
 db = client.ComparisonObjects
