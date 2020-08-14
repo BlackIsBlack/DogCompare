@@ -25,7 +25,7 @@ SECRET_KEY = open('/home/pi/djangosecret.txt','r').read()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ebon.club']
+ALLOWED_HOSTS = ['ebon.club','secret-tundra-00440.herokuapp.com']
 
 
 # Application definition

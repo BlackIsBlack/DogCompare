@@ -1,6 +1,8 @@
 import pymongo
-apiKey = open('/home/pi/apikey.txt','r').read()
-print(apiKey)
+from boto.s3.connection import S3Connection
+import environ
+s3 = S3Connection(os.environ['apiKey'])
+apiKey = env('APIKEY')
 client = pymongo.MongoClient(apiKey)
 db = client.ComparisonObjects
 objectInfo = db.objectInfo
